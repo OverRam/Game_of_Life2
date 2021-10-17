@@ -4,32 +4,46 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class WorldModel {
-    private int size;
-    private boolean[][] world;
-    private long seedWorld = 0;
+    private final int size;
+    private boolean[][] worldMatrix;
+//    private long seedWorld = 0;
+    private long liveCells;
 
-    WorldModel(int size, long seedWorld) {
+
+    WorldModel(int size) {
         this.size = size;
-        world = new boolean[size][size];
-        this.seedWorld = seedWorld;
+        worldMatrix = new boolean[size][size];
+//        this.seedWorld = seedWorld;
+        initialFillWorld();
+        liveCells = countLiveCells();
     }
 
-    WorldModel(int size, boolean[][] worldMatrix) {
-        this.size = size;
-        world = worldMatrix;
-    }
-
-    void setWorldModel(boolean[][] world, int sizeWorld) {
-        this.size = sizeWorld;
-        this.world = world;
-    }
-
-    void initialFillWorld() {
-        Random rnd = new Random(seedWorld);
+    private long countLiveCells() {
+        int count = 0;
         for (int i = 0; i < size; i++) {
-            Arrays.fill(world[i], false);
             for (int j = 0; j < size; j++) {
-                world[i][j] = rnd.nextBoolean();
+                count += worldMatrix[i][j] ? 1 : 0;
+            }
+        }
+        return count;
+    }
+
+    void setMatrixWorldModel(boolean[][] world) {
+        if (world.length == size) {
+            this.worldMatrix = world;
+            liveCells = countLiveCells();
+        } else {
+            System.out.println("Wrong matrix");
+        }
+    }
+
+    private void initialFillWorld() {
+//        Random rnd = new Random(seedWorld);
+        Random rnd = new Random();
+        for (int i = 0; i < size; i++) {
+            Arrays.fill(worldMatrix[i], false);
+            for (int j = 0; j < size; j++) {
+                worldMatrix[i][j] = rnd.nextBoolean();
             }
         }
     }
@@ -39,6 +53,10 @@ public class WorldModel {
     }
 
     boolean[][] getWordMatrix() {
-        return world;
+        return worldMatrix;
+    }
+
+    long getLiveCells() {
+        return liveCells;
     }
 }
