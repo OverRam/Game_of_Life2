@@ -3,18 +3,24 @@ package life;
 import java.util.Arrays;
 import java.util.Random;
 
-public class WorldModel {
+public class ModelWorld {
     private final int size;
     private boolean[][] worldMatrix;
-//    private long seedWorld = 0;
+    private long seedWorld;
     private long liveCells;
 
-
-    WorldModel(int size) {
+    ModelWorld(int size) {
         this.size = size;
         worldMatrix = new boolean[size][size];
-//        this.seedWorld = seedWorld;
-        initialFillWorld();
+        randomFillWorld();
+        liveCells = countLiveCells();
+    }
+
+    ModelWorld(int sizeWorld, long seedWorld) {
+        this.seedWorld = seedWorld;
+        this.size = sizeWorld;
+        worldMatrix = new boolean[sizeWorld][sizeWorld];
+        randomFillWorld();
         liveCells = countLiveCells();
     }
 
@@ -37,9 +43,8 @@ public class WorldModel {
         }
     }
 
-    private void initialFillWorld() {
-//        Random rnd = new Random(seedWorld);
-        Random rnd = new Random();
+    private void randomFillWorld() {
+        Random rnd = new Random(seedWorld);
         for (int i = 0; i < size; i++) {
             Arrays.fill(worldMatrix[i], false);
             for (int j = 0; j < size; j++) {
