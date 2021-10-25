@@ -27,7 +27,7 @@ public class NextGenerationsWorld {
         return worldToCheck[actualRow][actualColumn] && (liveCell == 2 | liveCell == 3);
     }
 
-    static void nextGenerationWorld(WorldModel worldModel) {
+    static void nextGenerationWorld(ModelWorld worldModel) {
         boolean[][] newMatrix = new boolean[worldModel.getSize()][worldModel.getSize()];
         for (int i = 0; i < worldModel.getSize(); i++) {
             for (int j = 0; j < worldModel.getSize(); j++) {
