@@ -28,10 +28,10 @@ public class NextGenerationsWorld {
     }
 
     static void nextGenerationWorld(ModelWorld worldModel) {
-        boolean[][] newMatrix = new boolean[worldModel.getSize()][worldModel.getSize()];
-        for (int i = 0; i < worldModel.getSize(); i++) {
-            for (int j = 0; j < worldModel.getSize(); j++) {
-                newMatrix[i][j] = setStatusCell(worldModel.getWordMatrix(), i, j);
+        boolean[][] newMatrix = new boolean[worldModel.getSizeWorld()][worldModel.getSizeWorld()];
+        for (int i = 0; i < worldModel.getSizeWorld(); i++) {
+            for (int j = 0; j < worldModel.getSizeWorld(); j++) {
+                newMatrix[i][j] = setStatusCell(worldModel.getMatrix(), i, j);
             }
         }
         worldModel.setMatrixWorldModel(newMatrix);
