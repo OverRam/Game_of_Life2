@@ -6,11 +6,16 @@ import java.awt.*;
 public class GameOfLife extends JFrame {
     private final JLabel lGenerationLabel;
     private final JLabel lAliveCellsLabel;
-    private int sizeNewWorld;
-    private int generationsNewWorld;
-    private ViewWorld drawWorld;
-    private WorldController worldController;
-    private int seedNewWorld;
+    private final JSlider sSpeedEvolutionSlide;
+    private final JTextField tSizeWorld;
+    private final JTextField tSeedWorld;
+    private final JTextField tNumberOfGenerations;
+    private final JToggleButton bPlayButton;
+    private final JToggleButton bPauseButton;
+    private final JButton bChoseColor;
+    private final JButton bResetButton;
+    private final JButton bAcceptParamNewWorld;
+    private final ViewWorld viewWorld = new ViewWorld(new ModelWorld(50));
 
     public GameOfLife() {
         super("Game of life");
@@ -21,9 +26,6 @@ public class GameOfLife extends JFrame {
 
         JPanel westPanel = new JPanel();
         westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
-        drawWorld = new ViewWorld();
-
-        JPanel centerPanel = drawWorld;
 
         //Minor panels
         JPanel pButtonPanel = new JPanel();
@@ -50,49 +52,34 @@ public class GameOfLife extends JFrame {
         lAliveCellsLabel.setName("AliveLabel");
 
         //button panel Section
-        JToggleButton bPlayButton = new JToggleButton("Play");
+        bPlayButton = new JToggleButton("Play");
 
-        JToggleButton bPauseButton = new JToggleButton("Pause");
+        bPauseButton = new JToggleButton("Pause");
 
         bPlayButton.setName("PlayToggleButton");
         bPlayButton.addActionListener(e -> {
             bPlayButton.setSelected(true);
             bPauseButton.setSelected(false);
-            worldController.setPlay(true);
         });
 
         bPauseButton.addActionListener(e -> {
             bPlayButton.setSelected(false);
             bPauseButton.setSelected(true);
-            worldController.setPlay(false);
         });
 
-        JFileChooser fSaveWorld = new JFileChooser();
-        JButton bSaveWorld = new JButton("Save world");
-
-        JButton bOpenWorld = new JButton("Open world");
-
-        JButton bResetButton = new JButton("Reset");
+        bResetButton = new JButton("Reset");
         bResetButton.setName("ResetButton");
         bResetButton.addActionListener(e -> {
             bPlayButton.setSelected(false);
             bPauseButton.setSelected(true);
-            worldController.setPlay(false);
-            worldController.setReset(true);
         });
 
-        JButton bChoseColor = new JButton("Chose color");
-        bChoseColor.addActionListener(e -> {
-            worldController.setPlay(false);
-            drawWorld.setCellColor(JColorChooser.
-                    showDialog(this, "Choose", Color.CYAN));
-            worldController.setPlay(true);
-        });
+        bChoseColor = new JButton("Chose color");
 
         //Tools button section
         JLabel lSpeedModeLabel = new JLabel("Speed mode");
 
-        JSlider sSpeedEvolutionSlide = new JSlider(0, 2000, 10);
+        sSpeedEvolutionSlide = new JSlider(0, 2000, 50);
         sSpeedEvolutionSlide.setName("Speed mode");
         sSpeedEvolutionSlide.setFont(new Font("Monospaced", Font.PLAIN, 10));
         sSpeedEvolutionSlide.setMajorTickSpacing(500);
@@ -100,24 +87,23 @@ public class GameOfLife extends JFrame {
         sSpeedEvolutionSlide.setPaintTrack(true);
         sSpeedEvolutionSlide.setPaintTicks(true);
         sSpeedEvolutionSlide.setPaintLabels(true);
-        sSpeedEvolutionSlide.addChangeListener(e -> worldController.setMilliSec(sSpeedEvolutionSlide.getValue()));
 
         JPanel pInputPanel = new JPanel();
         pInputPanel.setLayout(new GridLayout(4, 2));
         pInputPanel.setMaximumSize(new Dimension(200, 110));
 
         //pInputPanel in tool
-        JTextField tSizeWorld = new JTextField();
+        tSizeWorld = new JTextField("Numbers only");
         tSizeWorld.setSize(new Dimension(50, 30));
         tSizeWorld.setMaximumSize(new Dimension(50, 30));
 
-        JTextField tSeedRandom = new JTextField();
-        tSeedRandom.setMaximumSize(new Dimension(50, 30));
+        tSeedWorld = new JTextField("Numbers only");
+        tSeedWorld.setMaximumSize(new Dimension(50, 30));
 
-        JTextField tNumberOfGenerations = new JTextField();
+        tNumberOfGenerations = new JTextField("Numbers only");
         tNumberOfGenerations.setSize(new Dimension(50, 30));
 
-        JButton bAcceptParamNewWorld = new JButton("Set world");
+        bAcceptParamNewWorld = new JButton("Set world");
 
         JLabel lSizeWorldLabel = new JLabel("Size world");
         JLabel lSeedRandom = new JLabel("Seed random");
@@ -128,8 +114,6 @@ public class GameOfLife extends JFrame {
         pButtonPanel.add(bPauseButton);
         pButtonPanel.add(bResetButton);
         pButtonPanel.add(bChoseColor);
-        pButtonPanel.add(bSaveWorld);
-        pButtonPanel.add(bOpenWorld);
 
         pLabelPanel.add(lGenerationLabel);
         pLabelPanel.add(lAliveCellsLabel);
@@ -137,7 +121,7 @@ public class GameOfLife extends JFrame {
         pInputPanel.add(lSizeWorldLabel);
         pInputPanel.add(tSizeWorld);
         pInputPanel.add(lSeedRandom);
-        pInputPanel.add(tSeedRandom);
+        pInputPanel.add(tSeedWorld);
         pInputPanel.add(lGenerationSetLabel);
         pInputPanel.add(tNumberOfGenerations);
         pInputPanel.add(bAcceptParamNewWorld);
@@ -148,8 +132,44 @@ public class GameOfLife extends JFrame {
 
         //Add to main Layout
         add(westPanel, BorderLayout.WEST);
-        add(centerPanel, BorderLayout.CENTER);
+        add(viewWorld, BorderLayout.CENTER);
         pack();
+    }
+
+    JButton getBChoseColor() {
+        return bChoseColor;
+    }
+
+    JSlider getsSpeedEvolutionSlide() {
+        return sSpeedEvolutionSlide;
+    }
+
+    JTextField getTSizeWorld() {
+        return tSizeWorld;
+    }
+
+    JTextField getTSeedWorld() {
+        return tSeedWorld;
+    }
+
+    JTextField getTNumberOfGenerations() {
+        return tNumberOfGenerations;
+    }
+
+    JButton getBAcceptParamNewWorld() {
+        return bAcceptParamNewWorld;
+    }
+
+    JToggleButton getBPlayButton() {
+        return bPlayButton;
+    }
+
+    JToggleButton getBPauseButton() {
+        return bPauseButton;
+    }
+
+    JButton getBResetButton() {
+        return bResetButton;
     }
 
     void setNumGenerationLabel(long generation) {
@@ -160,16 +180,7 @@ public class GameOfLife extends JFrame {
         lAliveCellsLabel.setText("Alive:" + cells);
     }
 
-    ViewWorld getDrawWorld() {
-        return drawWorld;
+    ViewWorld getViewWorld() {
+        return viewWorld;
     }
-
-    void setDrawWorld(ViewWorld drawWorld) {
-        this.drawWorld = drawWorld;
-    }
-
-    void setWorldController(WorldController worldController) {
-        this.worldController = worldController;
-    }
-
 }
