@@ -9,8 +9,10 @@ public class ViewWorld extends JPanel {
     private boolean[][] worldMatrix;
     private Color cellColor = Color.BLACK;
 
-    ViewWorld() {
-        setPreferredSize(new Dimension(300, 300));
+    ViewWorld(ModelWorld wolWorldModel) {
+        this.wolWorldModel = wolWorldModel;
+        int size = wolWorldModel.getSizeWorld() * 10 + 10;
+        this.setPreferredSize(new Dimension(size, size));
     }
 
     void setCellColor(Color cellColor) {
@@ -19,16 +21,15 @@ public class ViewWorld extends JPanel {
 
     public void paint(Graphics g) {
         super.paint(g);
-        if (wolWorldModel != null) {
-            worldMatrix = wolWorldModel.getWordMatrix();
-            drawGrid(g);
-            drawCells(g);
-        }
+        worldMatrix = wolWorldModel.getMatrix();
+        drawCells(g);
+        drawGrid(g);
     }
 
     void drawGrid(Graphics g) {
+        g.setColor(g.getColor() == Color.BLACK ? Color.gray : Color.BLACK);
         for (int i = 0; i < worldMatrix.length * sizeCell + sizeCell; i += sizeCell) {
-            //worldMatrix.length * sizeCell == length line
+            //worldMatrix.length * sizeCell == length draw line
             g.drawLine(i, 0, i, worldMatrix.length * sizeCell);
             g.drawLine(0, i, worldMatrix.length * sizeCell, i);
         }
