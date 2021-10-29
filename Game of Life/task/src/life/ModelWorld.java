@@ -4,30 +4,41 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class ModelWorld {
-    private final int size;
+    private int sizeWorld;
     private boolean[][] worldMatrix;
     private long seedWorld;
     private long liveCells;
 
     ModelWorld(int size) {
-        this.size = size;
+        this.sizeWorld = size;
         worldMatrix = new boolean[size][size];
         randomFillWorld();
         liveCells = countLiveCells();
     }
 
+    ModelWorld(ModelWorld model) {
+        sizeWorld = model.sizeWorld;
+        worldMatrix = model.getMatrix();
+        seedWorld = model.getSeedWorld();
+        liveCells = model.getLiveCells();
+    }
+
     ModelWorld(int sizeWorld, long seedWorld) {
         this.seedWorld = seedWorld;
-        this.size = sizeWorld;
+        this.sizeWorld = sizeWorld;
         worldMatrix = new boolean[sizeWorld][sizeWorld];
         randomFillWorld();
         liveCells = countLiveCells();
     }
 
+    public long getSeedWorld() {
+        return seedWorld;
+    }
+
     private long countLiveCells() {
         int count = 0;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < sizeWorld; i++) {
+            for (int j = 0; j < sizeWorld; j++) {
                 count += worldMatrix[i][j] ? 1 : 0;
             }
         }
@@ -35,29 +46,26 @@ public class ModelWorld {
     }
 
     void setMatrixWorldModel(boolean[][] world) {
-        if (world.length == size) {
-            this.worldMatrix = world;
-            liveCells = countLiveCells();
-        } else {
-            System.out.println("Wrong matrix");
-        }
+        this.worldMatrix = world;
+        sizeWorld = world.length;
+        liveCells = countLiveCells();
     }
 
     private void randomFillWorld() {
         Random rnd = new Random(seedWorld);
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < sizeWorld; i++) {
             Arrays.fill(worldMatrix[i], false);
-            for (int j = 0; j < size; j++) {
+            for (int j = 0; j < sizeWorld; j++) {
                 worldMatrix[i][j] = rnd.nextBoolean();
             }
         }
     }
 
-    int getSize() {
-        return size;
+    int getSizeWorld() {
+        return sizeWorld;
     }
 
-    boolean[][] getWordMatrix() {
+    boolean[][] getMatrix() {
         return worldMatrix;
     }
 
