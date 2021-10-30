@@ -66,7 +66,7 @@ public class ControllerWorld {
     }
 
     void run() {
-        while (gameOfLifeView.isVisible()) {  //problem
+        while (gameOfLifeView.isVisible()) {
             while (actualGeneration < numberOFGenerations && isNotEndGeneration && worldModel.getLiveCells() > 0) {
                 if (isPlay) {
                     ++actualGeneration;
